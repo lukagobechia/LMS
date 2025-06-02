@@ -1,20 +1,25 @@
 import express from "express";
 import cors from "cors";
 import apiRouter from "./src/api/apiRouter.js";
-import morgan from 'morgan'
+import morgan from "morgan";
+import path from "path";
+import connectDB from "./src/config/db.js";
+import { fileURLToPath } from "url";
+
+connectDB();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 app.use(express.json()); // express v4.16.0+
+app.use(morgan("dev"));
 
-app.use(morgan('dev'));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-  res.redirect("api/");
-});
+app.use("/", apiRouter);
 
-app.use("/api", apiRouter);
-
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
