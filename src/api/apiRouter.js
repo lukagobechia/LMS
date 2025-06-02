@@ -1,7 +1,10 @@
 import { Router } from "express";
-// import testRouter from "./test/test.route.js";
+import authRouter from "./auth/auth.route.js";
+import UserRouter from "./user/user.route.js";
+
 const apiRouter = Router();
 
-// apiRouter.use("/test", testRouter);
+apiRouter.use("/auth", authRouter);
+apiRouter.use("/user", UserRouter);
 
 export default apiRouter;
