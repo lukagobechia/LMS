@@ -16,3 +16,22 @@ User resource
 | `DELETE` | `/user/me` | Delete own account          |
 | `PATCH`  | `/user/:id` | Update user by ID          |
 | `DELETE` | `/user/:id` | Delete user by ID          |
+
+Course resource
+| Method   | Endpoint       | Description                           |
+| -------- | -------------- | ------------------------------------- |
+| `GET`    | `/courses/`    | Get all courses                       |
+| `GET`    | `/courses/:id` | Get course by ID                      |
+| `POST`   | `/courses/`    | Create a new course (Instructor only) |
+| `PUT`    | `/courses/:id` | Update a course (Instructor only)     |
+| `DELETE` | `/courses/:id` | Delete a course (Instructor only)     |
+
+Lesson resource
+| Method   | Endpoint                | Description                            |
+| -------- | ----------------------- | -------------------------------------- |
+| `GET`    | `/lessons/all`          | Get all lessons                        |
+| `GET`    | `/lessons/:lessonId`    | Get lesson by ID                       |
+| `GET`    | `/lessons?courseId=...` | Get lessons by course ID (query param) |
+| `POST`   | `/lessons/`             | Add a new lesson (Instructor only)     |
+| `PUT`    | `/lessons/:lessonId`    | Update lesson (Instructor only)        |
+| `DELETE` | `/lessons/:lessonId`    | Delete lesson (Instructor only)        |
