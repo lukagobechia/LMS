@@ -1,3 +1,9 @@
+export const Roles = Object.freeze({
+  STUDENT: "student",
+  INSTRUCTOR: "instructor",
+  ADMIN: "administration",
+});
+
 export const roleGuard = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -6,7 +12,7 @@ export const roleGuard = (...allowedRoles) => {
 
     const userRole = req.user.role;
 
-    if (userRole === ADMIN_ROLE || allowedRoles.includes(userRole)) {
+    if (userRole === Roles.ADMIN || allowedRoles.includes(userRole)) {
       return next();
     }
 
