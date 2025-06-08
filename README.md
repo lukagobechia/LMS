@@ -42,3 +42,10 @@ Lesson Progress
 | POST   | /api/progress/lessons/:lessonId/complete | Mark lesson as completed (student only)   |
 | DELETE | /api/progress/lessons/:lessonId/complete | Unmark lesson as completed (student only) |
 | GET    | /api/progress/:courseId                  | Get completed lessons for a course        |
+
+Lesson resource
+| Method   | Endpoint                | Description                            |
+| -------- | ----------------------- | -------------------------------------- |
+| `POST`   | `/enrollment/:courseId` | Enroll current student in a course     |
+| `GET`    | `/enrollment/my-courses`| Retrieve all courses the current student is enrolled in|
+| `GET`    | `/enrollment/enrolled-students/:courseId` | Get all students enrolled in a specific course|
