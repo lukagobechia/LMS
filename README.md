@@ -49,3 +49,10 @@ Lesson resource
 | `POST`   | `/enrollment/:courseId` | Enroll current student in a course     |
 | `GET`    | `/enrollment/my-courses`| Retrieve all courses the current student is enrolled in|
 | `GET`    | `/enrollment/enrolled-students/:courseId` | Get all students enrolled in a specific course|
+
+Attendance resource
+| Method | Endpoint                | Description                                                        |
+| ------ | ----------------------- | ------------------------------------------------------------------ |
+| `POST` | `/attendance/:lessonId` | Submit attendance for a specific lesson (Instructor only)          |
+| `GET`  | `/attendance/my`        | Get current student’s attendance records                           |
+| `GET`  | `/attendance/:courseId` | Get all attendance records for a specific course (Instructor only) |
