@@ -6,7 +6,7 @@ export const roleGuard = (...allowedRoles) => {
 
     const userRole = req.user.role;
 
-    if (userRole === "administration" || allowedRoles.includes(userRole)) {
+    if (userRole === ADMIN_ROLE || allowedRoles.includes(userRole)) {
       return next();
     }
 
