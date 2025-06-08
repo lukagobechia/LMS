@@ -1,15 +1,8 @@
 export const roleGuard = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized: No user found" });
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Forbidden: Access denied" });
     }
-
-    const userRole = req.user.role;
-
-    if (userRole === ADMIN_ROLE || allowedRoles.includes(userRole)) {
-      return next();
-    }
-
-    return res.status(403).json({ message: "Forbidden: Access denied" });
+    next();
   };
 };
