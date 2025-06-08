@@ -43,7 +43,7 @@ Lesson Progress
 | DELETE | /api/progress/lessons/:lessonId/complete | Unmark lesson as completed (student only) |
 | GET    | /api/progress/:courseId                  | Get completed lessons for a course        |
 
-Lesson resource
+Enrollment resource
 | Method   | Endpoint                | Description                            |
 | -------- | ----------------------- | -------------------------------------- |
 | `POST`   | `/enrollment/:courseId` | Enroll current student in a course     |
