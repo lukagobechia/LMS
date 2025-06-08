@@ -35,3 +35,10 @@ Lesson resource
 | `POST`   | `/lessons/`             | Add a new lesson (Instructor only)     |
 | `PUT`    | `/lessons/:lessonId`    | Update lesson (Instructor only)        |
 | `DELETE` | `/lessons/:lessonId`    | Delete lesson (Instructor only)        |
+
+Lesson Progress
+| Method | Endpoint                                 | Description                               |
+| -------| -----------------------------------------| ----------------------------------------- |
+| POST   | /api/progress/lessons/:lessonId/complete | Mark lesson as completed (student only)   |
+| DELETE | /api/progress/lessons/:lessonId/complete | Unmark lesson as completed (student only) |
+| GET    | /api/progress/:courseId                  | Get completed lessons for a course        |
