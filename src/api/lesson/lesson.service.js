@@ -1,8 +1,24 @@
 import LessonModel from "./lesson.model.js";
+import EnrollmentModel from "../enrollment/enrollment.model.js";
+import AttendanceModel from "../attendance/attendance.model.js";
 
 export const addLesson = async (lessonData) => {
   const lesson = new LessonModel(lessonData);
   await lesson.save();
+
+  const enrolledStudents = await EnrollmentModel.find({ course: lesson.course }).select("student");
+
+  const attendanceEntries = enrolledStudents.map(({ student }) => ({
+    student,
+    course: lesson.course,
+    lesson: lesson._id,
+    present: false
+  }));
+
+  if (attendanceEntries.length > 0) {
+    await AttendanceModel.insertMany(attendanceEntries);
+  }
+
   return lesson;
 };
 
