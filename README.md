@@ -1,4 +1,5 @@
 Auth resource
+
 | Method | Endpoint                       | Description                    |
 | ------ | ------------------------------ | ------------------------------ |
 | `POST` | `/auth/sign-up`                | Register a new user            |
@@ -9,6 +10,7 @@ Auth resource
 | `POST` | `/auth/reset-password`         | Reset password using token     |
 
 User resource
+
 | Method   | Endpoint   | Description                 |
 | -------- | ---------- | --------------------------- |
 | `GET`    | `/user/me` | Get current user profile    |
@@ -18,6 +20,7 @@ User resource
 | `DELETE` | `/user/:id` | Delete user by ID          |
 
 Course resource
+
 | Method   | Endpoint       | Description                           |
 | -------- | -------------- | ------------------------------------- |
 | `GET`    | `/courses/`    | Get all courses                       |
@@ -27,6 +30,7 @@ Course resource
 | `DELETE` | `/courses/:id` | Delete a course (Instructor only)     |
 
 Lesson resource
+
 | Method   | Endpoint                | Description                            |
 | -------- | ----------------------- | -------------------------------------- |
 | `GET`    | `/lessons/all`          | Get all lessons                        |
@@ -37,6 +41,7 @@ Lesson resource
 | `DELETE` | `/lessons/:lessonId`    | Delete lesson (Instructor only)        |
 
 Lesson Progress
+
 | Method | Endpoint                                 | Description                               |
 | -------| -----------------------------------------| ----------------------------------------- |
 | POST   | /api/progress/lessons/:lessonId/complete | Mark lesson as completed (student only)   |
@@ -44,6 +49,7 @@ Lesson Progress
 | GET    | /api/progress/:courseId                  | Get completed lessons for a course        |
 
 Enrollment resource
+
 | Method   | Endpoint                | Description                            |
 | -------- | ----------------------- | -------------------------------------- |
 | `POST`   | `/enrollment/:courseId` | Enroll current student in a course     |
@@ -51,8 +57,19 @@ Enrollment resource
 | `GET`    | `/enrollment/enrolled-students/:courseId` | Get all students enrolled in a specific course|
 
 Attendance resource
+
 | Method | Endpoint                | Description                                                        |
 | ------ | ----------------------- | ------------------------------------------------------------------ |
 | `POST` | `/attendance/:lessonId` | Submit attendance for a specific lesson (Instructor only)          |
 | `GET`  | `/attendance/my`        | Get current student’s attendance records                           |
 | `GET`  | `/attendance/:courseId` | Get all attendance records for a specific course (Instructor only) |
+
+
+File Management Endpoints
+
+| Method   | Endpoint              | Description                                             | Roles                   |
+| -------- | --------------------- | ------------------------------------------------------- | ----------------------- |
+| `POST`   | `/files/upload`       | Upload a file to AWS S3 and persist metadata in MongoDB | `instructor`            |
+| `GET`    | `/files/:id/download` | Generate a time-limited (1 h) signed download URL       | `student`, `instructor` |
+| `DELETE` | `/files/:id/delete`   | Remove the file from S3 and delete its metadata record  | `instructor`            |
+
