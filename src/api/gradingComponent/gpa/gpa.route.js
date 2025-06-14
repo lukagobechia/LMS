@@ -6,7 +6,7 @@ import { getGpaPerCourse, getCumulativeGpa } from './gpa.service.js';
 const router = express.Router();
 
 router.get(
-  '/my/gpa-per-course',
+  '/my/per-course',
   authGuard,
   roleGuard('student'),
   async (req, res) => {
@@ -20,7 +20,7 @@ router.get(
 );
 
 router.get(
-  '/my/gpa-cumulative',
+  '/my/cumulative',
   authGuard,
   roleGuard('student'),
   async (req, res) => {
