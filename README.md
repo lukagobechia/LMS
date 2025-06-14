@@ -84,3 +84,12 @@ Quiz Management
 | `PUT`  | `/lessons/quiz-submissions/:submissionId/grade` | `instructor`            | Grade open-ended questions and compute final score        |
 | `GET`  | `/lessons/quiz-results/:quizId`                 | `instructor`            | View all submissions and scores for a quiz                |
 | `GET`  | `/lessons/quiz-results/:quizId/student`         | `student`               | View individual quiz result (MCQ + open)                  |
+
+Grading System 
+
+| Method | Endpoint                            | Description                                                   | Access               |
+| ------ | ----------------------------------- | ------------------------------------------------------------- | -------------------- |
+| `POST` | `/api/courses/:courseId/components` | Create grading components for a course (e.g. Quiz, Midterm)   | Instructor only      |
+| `GET`  | `/api/courses/:courseId/components` | Get all grading components for a course                       | Instructor & Student |
+| `POST` | `/api/courses/:courseId/grades`     | Assign or update student scores for grading components        | Instructor only      |
+| `GET`  | `/api/grades/my/:courseId`          | View all grades and total score for the authenticated student | Student only         |
