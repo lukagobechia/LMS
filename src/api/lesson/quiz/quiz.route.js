@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { createQuiz, getQuiz, submitQuiz } from "./quiz.service.js";
+import {
+  createQuiz,
+  getQuiz,
+  submitQuiz,
+  gradeOpenAnswers,
+  getQuizResults,
+  getQuizResultsStudent,
+} from "./quiz.service.js";
 import { authGuard } from "../../../middlewares/auth.middleware.js";
 import { roleGuard } from "../../../middlewares/role.middleware.js";
 
@@ -39,12 +46,64 @@ QuizRouter.post(
   roleGuard("student"),
   async (req, res) => {
     try {
-      const result = await submitQuiz(req.params.quizId, req.body.answers);
-      res.json(result);
+      const result = await submitQuiz(
+        req.params.quizId,
+        req.user.userId,
+        req.body.answers
+      );
+      res.status(201).json(result);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   }
 );
 
+QuizRouter.put(
+  "/quiz-submissions/:submissionId/grade",
+  authGuard,
+  roleGuard("instructor"),
+  async (req, res) => {
+    try {
+      const { submissionId } = req.params;
+      const { grades } = req.body;
+
+      const result = await gradeOpenAnswers(submissionId, grades);
+
+      res.status(201).json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+QuizRouter.get(
+  "/quiz-results/:quizId",
+  authGuard,
+  roleGuard("instructor"),
+  async (req, res) => {
+    try {
+      const { quizId } = req.params;
+      const submissions = await getQuizResults(quizId);
+      res.json(submissions);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+QuizRouter.get(
+  "/quiz-results/:quizId/student",
+  authGuard,
+  roleGuard("student"),
+  async (req, res) => {
+    try {
+      const { quizId } = req.params;
+      const userId = req.user.userId;
+      const submissions = await getQuizResultsStudent(quizId, userId);
+      res.json(submissions);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
 export default QuizRouter;
