@@ -6,26 +6,26 @@ import {
   getLessonsByCourse,
   updateLesson,
   deleteLesson,
+  addLessonContent,
 } from "./lesson.service.js";
 import { authGuard } from "../../middlewares/auth.middleware.js";
 import { roleGuard } from "../../middlewares/role.middleware.js";
+import multer from "multer";
+import QuizRouter from "./quiz/quiz.route.js";
 
 const LessonRouter = Router();
 
-LessonRouter.post(
-  "/",
-  authGuard,
-  roleGuard("instructor"),
-  async (req, res) => {
-    try {
-      const lessonData = req.body;
-      const lesson = await addLesson(lessonData);
-      res.status(201).json({ message: "Lesson added", data: lesson });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+const upload = multer({ storage: multer.memoryStorage() });
+
+LessonRouter.post("/", authGuard, roleGuard("instructor"), async (req, res) => {
+  try {
+    const lessonData = req.body;
+    const lesson = await addLesson(lessonData);
+    res.status(201).json({ message: "Lesson added", data: lesson });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-);
+});
 
 LessonRouter.get("/all", async (req, res) => {
   try {
@@ -52,7 +52,9 @@ LessonRouter.get("/", async (req, res) => {
   try {
     const courseId = req.query.courseId;
     if (!courseId) {
-      return res.status(400).json({ message: "courseId query parameter required" });
+      return res
+        .status(400)
+        .json({ message: "courseId query parameter required" });
     }
     const lessons = await getLessonsByCourse(courseId);
     res.status(200).json(lessons);
@@ -88,5 +90,15 @@ LessonRouter.delete(
     }
   }
 );
+
+LessonRouter.post(
+  "/:lessonId/content",
+  upload.single("file"),
+  authGuard,
+  roleGuard("instructor"),
+  addLessonContent
+);
+
+LessonRouter.use("/", QuizRouter);
 
 export default LessonRouter;
