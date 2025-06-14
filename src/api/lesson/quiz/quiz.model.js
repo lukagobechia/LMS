@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema({
-  question: String,
+  question: { type: String, required: true },
   options: [String],
-  correctAnswer: String,
+  correctAnswer: { type: String },
+  type: { type: String, enum: ["multiple", "open"], default: "multiple" },
+  points: { type: Number, default: 1 },
 });
 
 const quizSchema = new mongoose.Schema(
@@ -14,8 +16,14 @@ const quizSchema = new mongoose.Schema(
       required: true,
     },
     questions: [questionSchema],
+    totalPossibleMcqScore: { type: Number, default: 0 },
+    totalPossibleOpenScore: { type: Number, default: 0 },
+    totalPossibleQuizScore: { type: Number, default: 0 },
+    numberOfMcqQuestions: { type: Number, default: 0 },
+    numberOfOpenQuestions: { type: Number, default: 0 },
+    numberOfQuestions: { type: Number, default: 0 },
   },
- {
+  {
     timestamps: true,
     collection: "quizzes",
     read: "nearest",

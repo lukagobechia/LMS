@@ -73,3 +73,14 @@ File Management Endpoints
 | `GET`    | `/file/:id/download` | Generate a time-limited (1 h) signed download URL       | `student`, `instructor` |
 | `DELETE` | `/file/:id/delete`   | Remove the file from S3 and delete its metadata record  | `instructor`            |
 
+
+Quiz Management
+
+| Method | Endpoint                                    | Roles                   | Description                                               |
+| ------ | ------------------------------------------- | ----------------------- | --------------------------------------------------------- |
+| `POST` | `/lessons/quiz/:lessonId`                       | `instructor`            | Create a quiz with a list of questions for a given lesson |
+| `GET`  | `/lessons/quiz/:quizId`                         | `student`, `instructor` | Fetch and shuffle quiz questions and their options        |
+| `POST` | `/lessons/quiz/:quizId/submit`                  | `student`               | Submit quiz answers, auto-grades MCQ questions            |
+| `PUT`  | `/lessons/quiz-submissions/:submissionId/grade` | `instructor`            | Grade open-ended questions and compute final score        |
+| `GET`  | `/lessons/quiz-results/:quizId`                 | `instructor`            | View all submissions and scores for a quiz                |
+| `GET`  | `/lessons/quiz-results/:quizId/student`         | `student`               | View individual quiz result (MCQ + open)                  |
