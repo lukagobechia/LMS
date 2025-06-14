@@ -5,7 +5,6 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl as awsGetSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { v4 as uuidv4 } from "uuid";
 import File from "./file.model.js";
 import dotenv from "dotenv";
 import CourseModel from "../course/course.model.js";
@@ -23,26 +22,21 @@ const s3 = new S3Client({
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
-export const uploadFile = async (req, res) => {
+export const uploadFile = async (file, lessonId, courseId, uploadedBy) => {
   try {
-    const courseId = req.body.courseId;
-    const lessonId = req.body.lessonId;
-    const file = req.file;
-    const uploadedBy = req.user.userId;
-
-    const course = await CourseModel.findById(courseId);
+    const course = await CourseModel.findById(courseId.toString());
     if (!course) {
-      return res.status(404).json({ message: "Course not found" });
+      throw new Error("Course not found");
     }
 
     const lesson = await LessonModel.findById(lessonId);
     if (!lesson) {
-      return res.status(404).json({ message: "Lesson not found" });
+      throw new Error("Lesson not found");
     }
 
     // const fileExtension = file.originalname.split(".").pop();
     console.log(file.originalname);
-    const fileKey = `course-${course.courseCode}-${courseId}/lesson-${lessonId}/${file.originalname}`;
+    const fileKey = `course-${course.courseCode}-${courseId.toString()}/lesson-${lessonId}/${file.originalname}`;
 
     const params = {
       Bucket: bucketName,
@@ -64,15 +58,13 @@ export const uploadFile = async (req, res) => {
 
     const signedUrl = await generateSignedUrl(bucketName, fileKey);
 
-    return res.status(201).json({
+    return {
       message: "File uploaded successfully",
       file: fileDoc,
       url: signedUrl,
-    });
+    };
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error.message || "File upload failed" });
+    throw new Error(error.message || "File upload failed");
   }
 };
 

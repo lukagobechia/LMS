@@ -69,7 +69,7 @@ File Management Endpoints
 
 | Method   | Endpoint              | Description                                             | Roles                   |
 | -------- | --------------------- | ------------------------------------------------------- | ----------------------- |
-| `POST`   | `/files/upload`       | Upload a file to AWS S3 and persist metadata in MongoDB | `instructor`            |
-| `GET`    | `/files/:id/download` | Generate a time-limited (1 h) signed download URL       | `student`, `instructor` |
-| `DELETE` | `/files/:id/delete`   | Remove the file from S3 and delete its metadata record  | `instructor`            |
+| `POST`   | `/file/upload`       | Upload a file to AWS S3 and persist metadata in MongoDB | `instructor`            |
+| `GET`    | `/file/:id/download` | Generate a time-limited (1 h) signed download URL       | `student`, `instructor` |
+| `DELETE` | `/file/:id/delete`   | Remove the file from S3 and delete its metadata record  | `instructor`            |
 
