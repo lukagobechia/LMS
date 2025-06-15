@@ -100,3 +100,24 @@ export const getCourseAttendance = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getLessonAttendance = async (req, res) => {
+  try {
+    const { lessonId } = req.params;
+
+    const lesson = await LessonModel.findById(lessonId).populate("course");
+    if (!lesson) {
+      return res.status(404).json({ message: "Lesson not found." });
+    }
+
+    const attendance = await AttendanceModel.find({ lesson: lessonId })
+      .populate({ path: "student", select: "_id firstName lastName" })
+      .populate({ path: "course", select: "_id courseCode title category" })
+      .populate({ path: "lesson", select: "_id title date" });
+
+    res.status(200).json({ data: attendance });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
