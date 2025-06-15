@@ -168,3 +168,43 @@ export const gradeOpenAnswers = async (submissionId, grades) => {
     return { message: err.message };
   }
 };
+
+export const updateQuiz = async (quizId, updatedFields) => {
+  const quiz = await QuizModel.findById(quizId);
+  if (!quiz) throw new Error("Quiz not found");
+
+  if (updatedFields.questions) {
+    quiz.questions = updatedFields.questions;
+
+    let totalPossibleMcqScore = 0;
+    let totalPossibleOpenScore = 0;
+    let numberOfMcqQuestions = 0;
+    let numberOfOpenQuestions = 0;
+
+    for (const q of updatedFields.questions) {
+      if (q.type === "multiple") {
+        totalPossibleMcqScore += Number(q.points) || 1;
+        numberOfMcqQuestions += 1;
+      } else if (q.type === "open") {
+        totalPossibleOpenScore += Number(q.points) || 1;
+        numberOfOpenQuestions += 1;
+      }
+    }
+
+    quiz.totalPossibleMcqScore = totalPossibleMcqScore;
+    quiz.totalPossibleOpenScore = totalPossibleOpenScore;
+    quiz.totalPossibleQuizScore = totalPossibleMcqScore + totalPossibleOpenScore;
+    quiz.numberOfMcqQuestions = numberOfMcqQuestions;
+    quiz.numberOfOpenQuestions = numberOfOpenQuestions;
+    quiz.numberOfQuestions = numberOfMcqQuestions + numberOfOpenQuestions;
+  }
+
+  Object.keys(updatedFields).forEach((key) => {
+    if (key !== "questions") {
+      quiz[key] = updatedFields[key];
+    }
+  });
+
+  await quiz.save();
+  return quiz;
+};

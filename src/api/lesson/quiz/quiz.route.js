@@ -6,6 +6,7 @@ import {
   gradeOpenAnswers,
   getQuizResults,
   getQuizResultsStudent,
+  updateQuiz,
 } from "./quiz.service.js";
 import { authGuard } from "../../../middlewares/auth.middleware.js";
 import { roleGuard } from "../../../middlewares/role.middleware.js";
@@ -101,6 +102,21 @@ QuizRouter.get(
       const userId = req.user.userId;
       const submissions = await getQuizResultsStudent(quizId, userId);
       res.json(submissions);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+QuizRouter.put(
+  "/quiz/:quizId",
+  authGuard,
+  roleGuard("instructor"),
+  async (req, res) => {
+    try {
+      const { quizId } = req.params;
+      const updatedQuiz = await updateQuiz(quizId, req.body.questions);
+      res.json(updatedQuiz);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
