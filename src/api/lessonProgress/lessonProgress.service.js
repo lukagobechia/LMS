@@ -91,3 +91,25 @@ export const getMyProgressGroupedByCourse = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getLessonProgressByLessonId = async (req, res) => {
+  try {
+    const studentId = req.user.userId;
+    const lessonId = req.params.lessonId;
+
+    const progress = await LessonProgress.findOne({
+      student: studentId,
+      lesson: lessonId,
+    })
+      .populate("lesson", "title order")
+      .populate("course", "courseCode title category");
+
+    if (!progress) {
+      return res.status(404).json({ message: "Progress not found" });
+    }
+
+    res.status(200).json({ data: progress });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

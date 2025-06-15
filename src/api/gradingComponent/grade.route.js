@@ -5,7 +5,8 @@ import {
   createGradingComponents,
   getGradingComponents,
   assignGrades,
-  getStudentGrades,
+  getStudentGradeByCourse,
+  getGradesForAllCourses
 } from "./grade.service.js";
 import GpaRouter from "./gpa/gpa.route.js";
 
@@ -36,7 +37,14 @@ GradeRouter.get(
   "/my/:courseId",
   authGuard,
   roleGuard("student"),
-  getStudentGrades
+  getStudentGradeByCourse
+);
+
+GradeRouter.get(
+  "/my",
+  authGuard,
+  roleGuard("student"),
+  getGradesForAllCourses
 );
 
 GradeRouter.use("/gpa", GpaRouter);
