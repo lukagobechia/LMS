@@ -65,9 +65,19 @@ export const getQuizResultsStudent = async (quizId, userId) => {
 };
 
 export const submitQuiz = async (quizId, userId, submittedAnswers) => {
-  console.log("hits");
   const quiz = await QuizModel.findById(quizId).lean();
   if (!quiz) throw new Error("Quiz not found");
+
+  const previousAttempts = await QuizSubmissionModel.countDocuments({
+    student: userId,
+    quiz: quizId,
+  });
+
+  if (previousAttempts >= (quiz.attemptLimit || 1)) {
+    throw new Error(
+      "Attempt limit reached. You cannot submit this quiz again."
+    );
+  }
 
   let autoScore = 0;
   const answers = [];
@@ -106,6 +116,7 @@ export const submitQuiz = async (quizId, userId, submittedAnswers) => {
 
   const openQuestionScore = 0;
   const totalScore = autoScore + openQuestionScore;
+
   const submission = await QuizSubmissionModel.create({
     student: userId,
     quiz: quizId,
@@ -113,16 +124,16 @@ export const submitQuiz = async (quizId, userId, submittedAnswers) => {
     openAnswers,
     mcqScore: autoScore,
     openQuestionScore,
-    totalScore: totalScore,
+    totalScore,
     submittedAt: new Date(),
   });
 
   return {
     message:
-      "Quiz submitted successfully for grading, open-ended questions will be graded by instructor later",
+      "Quiz submitted successfully for grading. Open-ended questions will be graded by instructor later.",
     mcqScore: autoScore,
     openQuestionScore,
-    totalScore: totalScore,
+    totalScore,
     submissionId: submission._id,
   };
 };

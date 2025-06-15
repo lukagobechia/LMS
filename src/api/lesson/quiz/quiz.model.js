@@ -6,6 +6,10 @@ const questionSchema = new mongoose.Schema({
   correctAnswer: { type: String },
   type: { type: String, enum: ["multiple", "open"], default: "multiple" },
   points: { type: Number, default: 1 },
+  attemptLimit: {
+      type: Number,
+      default: 1,
+    },
 });
 
 const quizSchema = new mongoose.Schema(
