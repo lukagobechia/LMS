@@ -29,7 +29,7 @@ export const getAllLessons = async () => {
 };
 
 export const getLessonById = async (lessonId) => {
-  const lesson = await LessonModel.findById(lessonId).populate("course");
+  const lesson = await LessonModel.findById(lessonId).populate("course", "title _id");
   return lesson;
 };
 

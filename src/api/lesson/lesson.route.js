@@ -27,7 +27,7 @@ LessonRouter.post("/", authGuard, roleGuard("instructor"), async (req, res) => {
   }
 });
 
-LessonRouter.get("/all", async (req, res) => {
+LessonRouter.get("/all", authGuard, async (req, res) => {
   try {
     const lessons = await getAllLessons();
     res.status(200).json(lessons);
@@ -36,32 +36,42 @@ LessonRouter.get("/all", async (req, res) => {
   }
 });
 
-LessonRouter.get("/:lessonId", async (req, res) => {
-  try {
-    const lesson = await getLessonById(req.params.lessonId);
-    if (!lesson) {
-      return res.status(404).json({ message: "Lesson not found" });
+LessonRouter.get(
+  "/:lessonId",
+  authGuard,
+  roleGuard("student", "instructor"),
+  async (req, res) => {
+    try {
+      const lesson = await getLessonById(req.params.lessonId);
+      if (!lesson) {
+        return res.status(404).json({ message: "Lesson not found" });
+      }
+      res.status(200).json(lesson);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    res.status(200).json(lesson);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
-LessonRouter.get("/", async (req, res) => {
-  try {
-    const courseId = req.query.courseId;
-    if (!courseId) {
-      return res
-        .status(400)
-        .json({ message: "courseId query parameter required" });
+LessonRouter.get(
+  "/",
+  authGuard,
+  roleGuard("student", "instructor"),
+  async (req, res) => {
+    try {
+      const courseId = req.query.courseId;
+      if (!courseId) {
+        return res
+          .status(400)
+          .json({ message: "courseId query parameter required" });
+      }
+      const lessons = await getLessonsByCourse(courseId);
+      res.status(200).json(lessons);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    const lessons = await getLessonsByCourse(courseId);
-    res.status(200).json(lessons);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 LessonRouter.put(
   "/:lessonId",
