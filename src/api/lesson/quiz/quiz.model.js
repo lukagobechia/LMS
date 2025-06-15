@@ -6,10 +6,6 @@ const questionSchema = new mongoose.Schema({
   correctAnswer: { type: String },
   type: { type: String, enum: ["multiple", "open"], default: "multiple" },
   points: { type: Number, default: 1 },
-  attemptLimit: {
-      type: Number,
-      default: 1,
-    },
 });
 
 const quizSchema = new mongoose.Schema(
@@ -20,6 +16,14 @@ const quizSchema = new mongoose.Schema(
       required: true,
     },
     questions: [questionSchema],
+    attemptLimit: {
+      type: Number,
+      default: 1,
+    },
+    timeLimit: {
+      type: Number,
+      default: null,
+    },
     totalPossibleMcqScore: { type: Number, default: 0 },
     totalPossibleOpenScore: { type: Number, default: 0 },
     totalPossibleQuizScore: { type: Number, default: 0 },
